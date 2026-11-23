@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1f6b4f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="857 名解">
+  <meta name="description" content="857 园林生态学名词解释背诵 · 先自己回答，再看答案">
+  <title>857 名解 · 背诵</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-180.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar" id="topbar">
+      <div class="topbar-inner">
+        <button class="icon-btn back-btn hidden" id="backBtn" aria-label="返回">‹</button>
+        <div class="brand">
+          <span class="brand-mark">857</span>
+          <span class="brand-text">名解背诵</span>
+        </div>
+        <div class="top-actions">
+          <span class="streak-pill" id="streakPill">🔥 0 天</span>
+          <button class="icon-btn" id="themeBtn" aria-label="切换主题">☾</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- 首页 -->
+      <section class="screen active" id="screen-home">
+        <div class="hero">
+          <div class="hero-kicker" id="todayLabel">今天</div>
+          <h1>今天，先开口<br>再对答案。</h1>
+          <p class="hero-sub">857 园林生态学 · 名词解释</p>
+          <div class="today-card">
+            <div class="today-ring" id="todayRing">
+              <div class="ring-inner">
+                <strong id="todayDone">0</strong>
+                <span>/ <em id="todayTotal">0</em></span>
+              </div>
+            </div>
+            <div class="today-info">
+              <div class="today-row"><span>待复习</span><b id="dueCount">0</b></div>
+              <div class="today-row"><span>今日新词</span><b id="newLeft">0</b></div>
+              <div class="today-row"><span>已掌握</span><b id="masteredCount">0</b></div>
+            </div>
+          </div>
+          <button class="primary-btn wide" id="startBtn">开始今日学习 <span>→</span></button>
+          <div class="hero-note">先自己说一遍，再点“显示答案”</div>
+        </div>
+
+        <div class="section-head">
+          <h2>学习概览</h2>
+          <button class="text-btn" data-goto="stats">统计</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-num" id="learnedCount">0</span>
+            <span class="stat-label">已学</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="streakCount">0</span>
+            <span class="stat-label">连续天数</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="favCount">0</span>
+            <span class="stat-label">收藏</span>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h2>章节进度</h2>
+          <span class="muted" id="chapterSummary"></span>
+        </div>
+        <div class="chapter-list" id="chapterList"></div>
+      </section>
+
+      <!-- 学习 -->
+      <section class="screen" id="screen-study">
+        <div class="study-top">
+          <div class="study-meta">
+            <span id="studyProgressText">0 / 0</span>
+            <span class="dot">·</span>
+            <span id="studyMode">今日学习</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="studyProgressBar"></div></div>
+        </div>
+
+        <div class="study-area" id="studyArea">
+          <article class="study-card" id="studyCard">
+            <div class="card-top">
+              <span class="chapter-chip" id="studyChapter">第1章</span>
+              <div class="card-tools">
+                <button class="icon-btn small" id="speakBtn" aria-label="朗读">🔊</button>
+                <button class="icon-btn small" id="starBtn" aria-label="收藏">☆</button>
+              </div>
+            </div>
+            <h1 class="study-term" id="studyTerm">名词</h1>
+            <div class="answer-box hidden" id="answerBox">
+              <div class="answer-label">参考答案</div>
+              <div class="answer-text" id="studyAnswer"></div>
+              <div class="answer-imp" id="studyImp"></div>
+              <div class="answer-note hidden" id="studyNote"></div>
+            </div>
+            <textarea id="draft" class="draft" rows="3" placeholder="先自己说一遍，再点显示答案（可不写）"></textarea>
+            <button class="primary-btn wide" id="revealBtn">显示答案</button>
+            <div class="rating hidden" id="rating">
+              <button class="rate again" data-rate="again"><b>忘记</b><span>明天再来</span></button>
+              <button class="rate hard" data-rate="hard"><b>模糊</b><span>短期复习</span></button>
+              <button class="rate good" data-rate="good"><b>认识</b><span>拉长间隔</span></button>
+            </div>
+            <div class="card-foot">
+              <button class="text-btn" id="prevBtn">‹ 上一个</button>
+              <button class="text-btn" id="skipBtn">跳过 ›</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="empty-state hidden" id="studyEmpty">
+          <div class="empty-icon">🌿</div>
+          <h2>今日任务完成</h2>
+          <p id="emptyText">去复习一下错词，或者明天再来。</p>
+          <button class="primary-btn" id="emptyHomeBtn">回到首页</button>
+        </div>
+      </section>
+
+      <!-- 词库 -->
+      <section class="screen" id="screen-library">
+        <div class="library-head">
+          <h1>词库</h1>
+          <span class="muted" id="libraryCount">169 个</span>
+        </div>
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input id="searchInput" type="search" placeholder="搜索名词 / 答案关键词" autocomplete="off">
+        </div>
+        <div class="chips" id="filterChips">
+          <button class="chip active" data-filter="all">全部</button>
+          <button class="chip" data-filter="new">未学</button>
+          <button class="chip" data-filter="fuzzy">模糊</button>
+          <button class="chip" data-filter="mastered">已掌握</button>
+          <button class="chip" data-filter="fav">收藏</button>
+        </div>
+        <div class="term-list" id="termList"></div>
+      </section>
+
+      <!-- 统计 -->
+      <section class="screen" id="screen-stats">
+        <div class="library-head">
+          <h1>学习统计</h1>
+          <button class="text-btn" id="resetBtn">重置</button>
+        </div>
+        <div class="stat-hero">
+          <div>
+            <span class="stat-hero-num" id="statLearned">0</span>
+            <span class="stat-hero-label">已学名词</span>
+          </div>
+          <div>
+            <span class="stat-hero-num" id="statMastered">0</span>
+            <span class="stat-hero-label">已掌握</span>
+          </div>
+          <div>
+            <span class="stat-hero-num" id="statDays">0</span>
+            <span class="stat-hero-label">学习天数</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>最近 7 天</h2><span class="muted" id="weekTotal">0 次</span></div>
+          <div class="week-chart" id="weekChart"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>章节进度</h2><span class="muted">按已学 / 总数</span></div>
+          <div class="chapter-list" id="statChapterList"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>掌握分布</h2></div>
+          <div class="bar-list">
+            <div class="bar-row"><span>已掌握</span><div class="bar"><i id="barMastered"></i></div><b id="numMastered">0</b></div>
+            <div class="bar-row"><span>学习中</span><div class="bar"><i id="barLearning"></i></div><b id="numLearning">0</b></div>
+            <div class="bar-row"><span>未学习</span><div class="bar"><i id="barNew"></i></div><b id="numNew">0</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 设置 -->
+      <section class="screen" id="screen-settings">
+        <div class="library-head"><h1>设置</h1></div>
+
+        <div class="setting-group">
+          <label class="setting-row">
+            <span><b>每日新词</b><small>每天最多引入多少个新名词</small></span>
+            <select id="dailyNewSelect">
+              <option value="10">10 个</option>
+              <option value="20">20 个</option>
+              <option value="30">30 个</option>
+              <option value="50">50 个</option>
+              <option value="169">全部</option>
+            </select>
+          </label>
+          <label class="setting-row">
+            <span><b>每次复习上限</b><small>一次学习最多排多少张卡</small></span>
+            <select id="reviewLimitSelect">
+              <option value="40">40 张</option>
+              <option value="80">80 张</option>
+              <option value="120">120 张</option>
+              <option value="200">200 张</option>
+            </select>
+          </label>
+          <label class="setting-row">
+            <span><b>学习顺序</b><small>随机打乱，或按章节顺序</small></span>
+            <select id="orderSelect">
+              <option value="random">随机</option>
+              <option value="sequence">顺序</option>
+            </select>
+          </label>
+          <label class="setting-row">
+            <span><b>深色模式</b><small>夜间护眼</small></span>
+            <input type="checkbox" id="darkToggle" class="switch">
+          </label>
+        </div>
+
+        <div class="setting-group">
+          <button class="setting-action" id="exportBtn"><span><b>导出学习数据</b><small>备份为 JSON 文件</small></span><span>›</span></button>
+          <label class="setting-action" for="importFile"><span><b>导入学习数据</b><small>从 JSON 恢复进度</small></span><span>›</span></label>
+          <input type="file" id="importFile" accept="application/json" hidden>
+        </div>
+
+        <div class="setting-group">
+          <button class="setting-action danger" id="resetAllBtn"><span><b>清空全部进度</b><small>不可恢复，请先导出备份</small></span><span>›</span></button>
+        </div>
+
+        <div class="about">
+          <p><b>857 名解背诵</b> · PWA 版</p>
+          <p>数据：857 园林生态学名词解释 169 个（18 套模拟题 + 2019—2026 真题去重）。所有进度保存在本机浏览器，不上传。</p>
+          <p>添加到主屏幕：Safari 分享 → 添加到主屏幕；Chrome 菜单 → 添加到主屏幕。</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar" id="tabbar">
+      <button class="tab active" data-goto="home"><span>⌂</span><b>首页</b></button>
+      <button class="tab" data-goto="study"><span>▤</span><b>学习</b></button>
+      <button class="tab" data-goto="library"><span>☰</span><b>词库</b></button>
+      <button class="tab" data-goto="stats"><span>◔</span><b>统计</b></button>
+      <button class="tab" data-goto="settings"><span>⚙</span><b>设置</b></button>
+    </nav>
+  </div>
+
+  <div class="modal hidden" id="modal">
+    <div class="modal-backdrop" data-close="modal"></div>
+    <div class="modal-card">
+      <div class="modal-top">
+        <span class="chapter-chip" id="modalChapter">第1章</span>
+        <button class="icon-btn" data-close="modal" aria-label="关闭">×</button>
+      </div>
+      <h2 id="modalTerm">名词</h2>
+      <div class="modal-answer-head"><span>参考答案</span><button class="text-btn" id="modalEdit">编辑</button></div>
+      <div class="modal-answer" id="modalAnswer"></div>
+      <div class="modal-note hidden" id="modalNote"></div>
+      <div class="modal-actions">
+        <button class="secondary-btn" id="modalStar">☆ 收藏</button>
+        <button class="primary-btn" id="modalMaster">标记已掌握</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
