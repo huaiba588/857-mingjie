@@ -258,6 +258,7 @@
 
     let combined = [...dueList, ...fresh];
     if (state.settings.order === 'random') combined = shuffle(combined);
+    if (currentCategory === 'all') combined.sort((a, b) => (a.category === '重点' ? 0 : 1) - (b.category === '重点' ? 0 : 1));
     return combined;
   }
 
